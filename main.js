@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const WebBase = window.localStorage;
 	memoryCreate();
 
-	function addNewTask(value, parent, statusValue, delete_buttonClass) {
+	function addNewTask(value, statusValue, delete_buttonClass) {
 		if (checkedEmpty(value)) {
 			return alert("Задача не была введена!");
 		}
@@ -127,8 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	formHight.addEventListener("submit", function (event) {
 		event.preventDefault(event);
 		addNewTask(
-			inputHightTask.value,
-			HightMainContainer,
+			inputHightTask.value, 
 			"Hight",
 			"Add-taskHight"
 		);
@@ -137,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	formLow.addEventListener("submit", function (event) {
 		event.preventDefault(event);
-		addNewTask(inputLowTask.value, lowMainContainer, "Low", "Add-taskLow");
+		addNewTask(inputLowTask.value, "Low", "Add-taskLow");
 		event.target.reset();
 	});
 });
