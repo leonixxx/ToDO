@@ -1,0 +1,105 @@
+input,
+button {
+	outline: none;
+	border: none;
+	background-color: white;
+}
+body {
+	background-color: rgb(100, 94, 94);
+}
+.header {
+	position: absolute;
+	left: 37dvw;
+	top: 3dvw;
+	width: 25dvw;
+	height: 4dvw;
+	background-color: rgb(227, 98, 201);
+	opacity: 0.7;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 2dvw;
+}
+.header-Title {
+	color: #000;
+	opacity: 1;
+	font-size: 2.7dvw;
+	align-items: center;
+	padding-bottom: 1.8dvw;
+}
+.Todo {
+	font-family: Roboto, sans-serif;
+	font-weight: 400;
+	font-size: 18px;
+	height: 100dvh;
+}
+.Todo__container {
+	background-color: white;
+	height: 60dvh;
+	width: 476px;
+	margin: auto;
+	margin-top: 20dvh;
+	border-radius: 40px;
+}
+h1 {
+	font-size: 22px;
+	padding-top: 30px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+.add1, .add2 {
+	display: flex;
+	color: #998899;
+	padding-right: 10px;
+}
+.add__container,
+.task__container {
+	margin: 10px;
+	border: 4px solid #998899;
+	border-radius: 10px;
+}
+.adding__input {
+	width: 408px;
+	height: 45px;
+	padding-left: 10px;
+}
+.Add-task,
+.Add-task1 {
+	height: 45px;
+}
+.Add-task__text {
+	font-size: 30px;
+	color: #998899;
+}
+.task__container {
+	display: flex;
+	gap: 10px;
+	padding: 10px;
+	align-items: flex-start;
+}
+.task__text {
+	width: 390px;
+}
+.task__text2 {
+	width: 390px;
+	color: green;
+}
+.Add-task1 {
+	padding: 0;
+}
+.check-box {
+    width: 1.1em;
+    height: 1.1em;
+    background-color: white;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.check-box:checked {
+    background-color: gray;
+}

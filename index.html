@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ToDo List</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="normalize.css" />
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<header class="header"><h1 class="header-Title">TASK MANAGER</h1></header>
+		<section class="Todo">
+			<div class="Todo__container">
+				<h1 class="prior">HIGH</h1>
+				<div class="add__container">
+					<form class="add1">
+						<input
+							id="addingHight__input"
+							class="adding__input"
+							type="text"
+							placeholder="Добавить важных дел"
+						/>
+						<button id="AddHigh-task">
+							<p class="Add-task__text">+</p>
+						</button>
+					</form>
+				</div>
+				<div class="Hight-Task__container">
+					
+				</div>
+				<h1 class="prior">LOW</h1>
+				<div class="add__container">
+					<form class="add2">
+						<input
+							id="addingLow__input"
+							class="adding__input"
+							type="text"
+							placeholder="Добавить"
+						/>
+						<button id="AddLow-task">
+							<p class="Add-task__text">+</p>
+						</button>
+					</form>
+				</div>
+				<div class="low-Task__container">
+					
+				</div>
+			</div>
+		</section>
+		<script type="module" src="chekLength.js"></script>
+		<script type="module" src="moduleOne.js"></script>
+		<script type="module" src="main.js"></script>
+	</body>
+</html>
