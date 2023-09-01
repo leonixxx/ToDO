@@ -28,78 +28,21 @@ document.addEventListener("DOMContentLoaded", function () {
 				return alert("Такая задача уже существует в списке задач");
 			} else continue;
 		}
-        if (stringConverter(item)) return;
+		if (stringConverter(value)) return;
 
-		if (item != "") {
-			const tasks = new Task(item, priorit);
-			mainBase.push(tasks);
-			addToLocalStorage(mainBase);
-		} else {
-			alert("Задача не была введена!");
-		}
-	}
+		const taskobj = {
+			name: `${value}`,
+			status: `${statusValue}`,
+			checkbox: "",
+			deleteClass: `${delete_buttonClass}`,
+		};
+		mainBase.push(taskobj);
+		addLocalStorage(value, taskobj);
+		renderHtml(mainBase, HightMainContainer, lowMainContainer);
 
-	function renderTodos(DataBase) {
-		HightMainContainer.innerHTML = "";
-		lowMainContainer.innerHTML = "";
-		for (let i = 0; i < DataBase.length; i++) {
-			let grenClass;
-			if (DataBase[i].status === false) {
-				grenClass = "task__text";
-			} else {
-				grenClass = "task__text2";
-			}
-			if (DataBase[i].priority === "Hight") {
-				HightMainContainer.innerHTML += `<div class="task__container">
-                <input
-                class="check-box"
-                type="checkbox"
-                name= ${DataBase[i].title}
-                id="delete"
-                />
-                <p class=${grenClass}>${DataBase[i].title}</p>
-                <button  class = 'delete-Task' data-id=${DataBase[i].id}>
-                <img src="close-icon.svg" alt="" />
-                </button>
-                </div>`;
-			} else {
-				lowMainContainer.innerHTML += `<div class="task__container">
-                <input
-                class="check-box"
-                type="checkbox"
-                name= ${DataBase[i].title}
-                id="delete"
-                />
-                <p class=${grenClass}>${DataBase[i].title}</p>
-                <button class = 'delete-Task' data-id=${DataBase[i].id}>
-                <img src="close-icon.svg" alt="" />
-                </button>
-                </div>`;
-			}
-		}
-        deleteTask(document.querySelectorAll('.delete-Task'));
-        checkBoxChekin();
-	}
-
-	function addToLocalStorage(todos) {
-		localStorage.setItem("todos", JSON.stringify(todos));
-		renderTodos(todos);
-	}
-
-	function getFromLocalStorage() {
-		const reference = localStorage.getItem("todos");
-		if (reference) {
-            mainBase = JSON.parse(reference)
-			renderTodos(JSON.parse(reference));
-		}
-	}
-	getFromLocalStorage();
-    
-    formHight.addEventListener("submit", function (event) {
-		event.preventDefault(event);
-		addTask(
-			inputHightTask.value, 
-			"Hight"
+		deleteTask(
+			document.querySelectorAll(`.${delete_buttonClass}`),
+			mainBase
 		);
 		event.target.reset();
 	});
