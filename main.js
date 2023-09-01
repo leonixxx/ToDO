@@ -1,6 +1,5 @@
 "use strict";
 
-import { renderHtml } from "./moduleOne.js";
 import { stringConverter } from "./chekLength.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -13,130 +12,146 @@ document.addEventListener("DOMContentLoaded", function () {
 		HightMainContainer = document.querySelector(".Hight-Task__container"),
 		lowMainContainer = document.querySelector(".low-Task__container");
 
-	const WebBase = window.localStorage;
-	memoryCreate();
+	function Task(title, priority) {
+		this.id = Date.now();
+		this.title = title;
+		this.priority = priority;
+		this.status = false;
+		this.complete = function () {
+			this.status = true;
+		};
+	}
 
-	function addNewTask(value, statusValue, delete_buttonClass) {
-		if (checkedEmpty(value)) {
-			return alert("Задача не была введена!");
-		}
-
-		for (let k = 0; k < mainBase.length; k++) {
-			if (mainBase[k].name === value) {
+	function addTask(item, priorit) {
+        for (let k = 0; k < mainBase.length; k++) {
+			if (mainBase[k].title === item) {
 				return alert("Такая задача уже существует в списке задач");
 			} else continue;
 		}
-		if (stringConverter(value)) return;
+        if (stringConverter(item)) return;
 
-		const taskobj = {
-			name: `${value}`,
-			status: `${statusValue}`,
-			checkbox: "",
-			deleteClass: `${delete_buttonClass}`,
-		};
-		mainBase.push(taskobj);
-		addLocalStorage(value, taskobj);
-		renderHtml(mainBase, HightMainContainer, lowMainContainer);
+		if (item != "") {
+			const tasks = new Task(item, priorit);
+			mainBase.push(tasks);
+			addToLocalStorage(mainBase);
+		} else {
+			alert("Задача не была введена!");
+		}
+	}
 
-		deleteTask(
-			document.querySelectorAll(`.${delete_buttonClass}`),
-			mainBase
+	function renderTodos(DataBase) {
+		HightMainContainer.innerHTML = "";
+		lowMainContainer.innerHTML = "";
+		for (let i = 0; i < DataBase.length; i++) {
+			let grenClass;
+			if (DataBase[i].status === false) {
+				grenClass = "task__text";
+			} else {
+				grenClass = "task__text2";
+			}
+			if (DataBase[i].priority === "Hight") {
+				HightMainContainer.innerHTML += `<div class="task__container">
+                <input
+                class="check-box"
+                type="checkbox"
+                name= ${DataBase[i].title}
+                id="delete"
+                />
+                <p class=${grenClass}>${DataBase[i].title}</p>
+                <button  class = 'delete-Task' data-id=${DataBase[i].id}>
+                <img src="close-icon.svg" alt="" />
+                </button>
+                </div>`;
+			} else {
+				lowMainContainer.innerHTML += `<div class="task__container">
+                <input
+                class="check-box"
+                type="checkbox"
+                name= ${DataBase[i].title}
+                id="delete"
+                />
+                <p class=${grenClass}>${DataBase[i].title}</p>
+                <button class = 'delete-Task' data-id=${DataBase[i].id}>
+                <img src="close-icon.svg" alt="" />
+                </button>
+                </div>`;
+			}
+		}
+        deleteTask(document.querySelectorAll('.delete-Task'));
+        checkBoxChekin();
+	}
+
+	function addToLocalStorage(todos) {
+		localStorage.setItem("todos", JSON.stringify(todos));
+		renderTodos(todos);
+	}
+
+	function getFromLocalStorage() {
+		const reference = localStorage.getItem("todos");
+		if (reference) {
+            mainBase = JSON.parse(reference)
+			renderTodos(JSON.parse(reference));
+		}
+	}
+	getFromLocalStorage();
+    
+    formHight.addEventListener("submit", function (event) {
+		event.preventDefault(event);
+		addTask(
+			inputHightTask.value, 
+			"Hight"
 		);
-		checkBoxChekin();
-	}
-	function checkBoxChekin() {
-		document.querySelectorAll(".check-box").forEach((chek, index) => {
-			chek.addEventListener("click", () => {
-				if (chek.checked == true) {
-					for (let i = 0; i < mainBase.length; i++) {
-						if (chek.name === mainBase[i].name) {
-							mainBase[i].checkbox = "checked";
-							chek.nextSibling.nextSibling.classList.replace(
-								"task__text",
-								"task__text2"
-							);
-							createCheckStatus(mainBase);
-						} else continue;
-					}
-				} else {
-					for (let i = 0; i < mainBase.length; i++) {
-						if (chek.name === mainBase[i].name) {
-							mainBase[i].checkbox = "";
-							chek.nextSibling.nextSibling.classList.replace(
-								"task__text2",
-								"task__text"
-							);
-							createCheckStatus(mainBase);
-						} else continue;
-					}
-				}
-			});
-		});
-	}
+		event.target.reset();
+	});
 
-	function checkedEmpty(value) {
-		if (!isNaN(value) || value === "") {
-			return true;
-		} else return false;
-	}
+    formLow.addEventListener("submit", function (event) {
+		event.preventDefault(event);
+		addTask(inputLowTask.value, "Low");
+		event.target.reset();
+	});
 
-	function deleteTask(btnDeleteClass, DataBase) {
+    function deleteTask(btnDeleteClass) {
 		btnDeleteClass.forEach((btn, index) => {
 			btn.addEventListener("click", () => {
-				btn.parentElement.remove(btn);
-				for (let i = 0; i < DataBase.length; i++) {
-					if (
-						btn.previousSibling.previousSibling.textContent ===
-						DataBase[i].name
-					) {
-						DataBase.splice(i, 1);
-						deleteLocalStorage(
-							btn.previousSibling.previousSibling.textContent
-						);
+				for (let i = 0; i < mainBase.length; i++) {
+					if (btn.dataset.id ==	mainBase[i].id) {
+                        mainBase = mainBase.filter(function (item) {
+                            return item.id != mainBase[i].id;
+                            });
+                        addToLocalStorage(mainBase);
 					} else continue;
 				}
 			});
 		});
 	}
 
-	function addLocalStorage(value, objectAdd) {
-		WebBase.setItem(value, JSON.stringify(objectAdd));
-	}
-	function deleteLocalStorage(value) {
-		WebBase.removeItem(value);
-	}
-	function createCheckStatus(objectAdd) {
-		WebBase.clear();
-		objectAdd.forEach((value, index) => {
-			addLocalStorage(objectAdd[index].name, value);
+    function checkBoxChekin() {
+		document.querySelectorAll(".check-box").forEach((chek, index) => {
+			chek.addEventListener("click", () => {
+				if (chek.checked == true) {
+					for (let i = 0; i < mainBase.length; i++) {
+						if (chek.name === mainBase[i].title) {
+                            mainBase[i].complete()
+							addToLocalStorage(mainBase);
+							chek.nextSibling.nextSibling.classList.replace(
+								"task__text",
+								"task__text2"
+							);
+						} else continue;
+					}
+				} else {
+					for (let i = 0; i < mainBase.length; i++) {
+						if (chek.name === mainBase[i].name) {
+                            mainBase[i].status = false;
+							addToLocalStorage(mainBase);
+							chek.nextSibling.nextSibling.classList.replace(
+								"task__text2",
+								"task__text"
+							);
+						} else continue;
+					}
+				}
+			});
 		});
 	}
-	function memoryCreate() {
-		if (WebBase.length !== 0) {
-			for (let i = 0; i < WebBase.length; i++) {
-				mainBase.push(JSON.parse(WebBase.getItem(WebBase.key(i))));
-			}
-
-			renderHtml(mainBase, HightMainContainer, lowMainContainer);
-			deleteTask(document.querySelectorAll(`.Add-taskHight`), mainBase);
-			deleteTask(document.querySelectorAll(`.Add-taskLow`), mainBase);
-			checkBoxChekin();
-		} else return console.log("БАЗА ПУСТА");
-	}
-
-	formHight.addEventListener("submit", function (event) {
-		event.preventDefault(event);
-		addNewTask(
-			inputHightTask.value, 
-			"Hight",
-			"Add-taskHight"
-		);
-		event.target.reset();
-	});
-
-	formLow.addEventListener("submit", function (event) {
-		event.preventDefault(event);
-		addNewTask(inputLowTask.value, "Low", "Add-taskLow");
-		event.target.reset();
-	});
 });
